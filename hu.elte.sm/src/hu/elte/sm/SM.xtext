@@ -1,0 +1,85 @@
+grammar hu.elte.sm.SM with org.eclipse.xtext.xbase.Xbase
+generate sM "http://www.elte.hu/sm/SM"
+
+import "http://www.eclipse.org/xtext/xbase/Xbase" as xbase
+
+SMFile:
+	'package' name=QualifiedName
+	importSection=XImportSection?
+	machines+=SMMachine*
+;
+
+SMMachine:
+	'machine' name=ValidID '{'
+		members+=SMMachineMember*
+	'}'
+;
+
+SMMachineMember
+	: SMField
+	| SMMethod
+	| SMEvent
+	| SMState
+	| SMTransition
+;
+
+SMField:
+	type=JvmTypeReference name=ValidID
+;
+
+SMMethod:
+	'def' type=JvmTypeReference name=ValidID '('
+		(parameters+=FullJvmFormalParameter (',' parameters+=FullJvmFormalParameter)*)?
+	')' body=XBlockExpression
+;
+
+SMEvent:
+	'event' name=ValidID
+;
+
+SMState:
+	(init?='init' | 'state') name=ValidID
+;
+
+SMTransition:
+	'transition' '{'
+		'from' source=[SMState]
+		'to' target=[SMState]
+		'on' trigger=[SMEvent]
+	'}'
+;
+
+SMExpression returns xbase::XExpression
+	: SMCheckStateExpression
+	| SMRaiseEventExpression
+;
+
+SMCheckStateExpression returns xbase::XExpression:
+	{SMCheckStateExpression}
+	'is' target=XExpression 'in' state=[SMState|QualifiedName]
+;
+
+SMRaiseEventExpression returns xbase::XExpression:
+	{SMRaiseEventExpression}
+	'raise' event=[SMEvent|QualifiedName]? 'in' target=XExpression
+;
+
+@Override
+XPrimaryExpression returns xbase::XExpression
+	: XConstructorCall
+	| XBlockExpression
+	| XSwitchExpression
+	| XSynchronizedExpression
+	| XFeatureCall
+	| XLiteral
+	| XIfExpression
+	| XForLoopExpression
+	| XBasicForLoopExpression
+	| XWhileExpression
+	| XDoWhileExpression
+	| XThrowExpression
+	| XReturnExpression
+	| XTryCatchFinallyExpression
+	| XParenthesizedExpression
+	| SMExpression
+;
