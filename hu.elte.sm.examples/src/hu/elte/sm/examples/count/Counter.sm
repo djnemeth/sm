@@ -1,0 +1,42 @@
+package hu.elte.sm.examples.count
+
+machine Counter {
+
+	// interface
+
+	event ToggleMode
+
+	def void start() {
+		count = 0
+	}
+
+	def void tick() {
+		if (is this in On) {
+			count++
+		}
+	}
+
+	def int result() {
+		count
+	}
+
+	// state machine
+
+	int count
+
+	init Off
+	state On
+
+	transition {
+		from Off
+		to On
+		on ToggleMode
+	}
+
+	transition {
+		from On
+		to Off
+		on ToggleMode
+	}
+
+}

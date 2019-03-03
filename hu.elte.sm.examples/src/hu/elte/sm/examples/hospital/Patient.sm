@@ -1,0 +1,69 @@
+package hu.elte.sm.examples.hospital
+
+import java.util.List
+import java.util.Random
+
+machine Patient {
+	def void acceptDiagnosis(int health, String name) {
+		this.health = health
+		this.name = name
+		this.intuition = new Random
+		this.friends = newArrayList
+
+		raise Admission in this
+		System.out.println(name + " was admitted with " + health + " hp")
+	}
+
+	def void meet(Patient otherPatient) {
+		if (intuition.nextBoolean) {
+			friends.add(otherPatient)
+			System.out.println(name + " befriended " + otherPatient.name)
+		}
+	}
+
+	def void acceptTreatment(int treatment) {
+		health = Integer.max(0, Integer.min(health + treatment, 100))
+
+		var eventVerb = if (treatment > 0) "treated" else "infected"
+		System.out.println(name + " was " + eventVerb + " for " + treatment + " hp, now on " + health + " hp")
+
+		if (health >= 100) {
+			raise Recovery in this
+			System.out.println(name + " successfully recovered from the sickness")
+		}
+
+		if (treatment > 0 && intuition.nextBoolean && !friends.empty) {
+			var friendToInfect = friends.get(intuition.nextInt(friends.size))
+			if (!(is friendToInfect in Healthy)) {
+				System.out.println(name + " cross-infected " + friendToInfect.name + " for -" + treatment + " hp")
+				friendToInfect.acceptTreatment(-treatment)
+			}
+		}
+	}
+
+	int health
+	String name
+	Random intuition
+	List<Patient> friends
+
+	event Admission
+	event Treatment
+	event Recovery
+
+	init Sick
+	state Recovering
+	state Healthy
+
+	transition {
+		from Sick
+		to Recovering
+		on Admission
+	}
+
+	transition {
+		from Recovering
+		to Healthy
+		on Recovery
+	}
+
+}

@@ -1,0 +1,36 @@
+package hu.elte.sm.examples.hospital
+
+import java.util.List
+import java.util.Random
+
+machine Doctor {
+	def void register(Patient patient, String name) {
+		if (healingDevice === null) {
+			healingDevice = new Random
+		}
+		if (patients === null) {
+			patients = newArrayList
+		}
+
+		patient.acceptDiagnosis(healingDevice.nextInt(100), name)
+		patients.forEach [ otherPatient |
+			otherPatient.meet(patient)
+			patient.meet(otherPatient)
+		]
+
+		patients.add(patient)
+		System.out.println();
+	}
+
+	def void work() {
+		while (!patients.empty) {
+			patients.forEach[acceptTreatment(healingDevice.nextInt(50))]
+			patients.removeIf[p | is p in Healthy];
+			System.out.println();
+		}
+	}
+
+	List<Patient> patients
+	Random healingDevice
+	init Practicing
+}
