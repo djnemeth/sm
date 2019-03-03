@@ -12,6 +12,12 @@ import org.eclipse.xtext.scoping.Scopes
 import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations
 import org.eclipse.xtext.xbase.typesystem.IBatchTypeResolver
 
+/**
+ * The scope provider defines, for each possible cross reference location, which
+ * entities can be referred to in the given context.
+ * 
+ * See: https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#scoping
+ */
 class SMScopeProvider extends AbstractSMScopeProvider {
 
 	@Inject extension IJvmModelAssociations
@@ -19,6 +25,7 @@ class SMScopeProvider extends AbstractSMScopeProvider {
 
 	override getScope(EObject context, EReference reference) {
 		switch context {
+			// In a 'CheckState' expression, only the states of the target machine should be accessible.
 			SMCheckStateExpression case reference == SMPackage.Literals.SM_CHECK_STATE_EXPRESSION__STATE: {
 				val jvmClass = context.target.resolveTypes.getActualType(context.target).type
 				val sourceMachine = jvmClass.primarySourceElement as SMMachine

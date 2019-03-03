@@ -1,5 +1,8 @@
 package hu.elte.sm.validation
 
+/**
+ * Issue codes help us uniquely identify our possible validation problems.
+ */
 class SMIssueCodes {
 	protected static val ISSUE_CODE_PREFIX = "hu.elte.sm.issue."
 

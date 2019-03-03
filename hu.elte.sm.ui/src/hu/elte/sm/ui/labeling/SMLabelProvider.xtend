@@ -12,6 +12,13 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider
 import org.eclipse.jface.viewers.StyledString
 import org.eclipse.xtext.xbase.ui.labeling.XbaseLabelProvider
 
+/**
+ * In the label provider we can define how entities of our language should be
+ * displayed across the Eclipse UI. One examples is the outline view (press
+ * Ctrl+O right now to show the Java [technically Xtend] equivalent).
+ * 
+ * See: https://www.eclipse.org/Xtext/documentation/310_eclipse_support.html#label-provider
+ */
 class SMLabelProvider extends XbaseLabelProvider {
 
 	@Inject
@@ -64,6 +71,10 @@ class SMLabelProvider extends XbaseLabelProvider {
 		)
 	}
 
+	/**
+	 * For the common 'name : details' text, where the part starting from the colon
+	 * is styled differently.
+	 */
 	def private styledText(String name, String details) {
 		new StyledString(name)
 			.append(

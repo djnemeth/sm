@@ -11,6 +11,13 @@ import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations
 import static hu.elte.sm.sM.SMPackage.Literals.*
 import static hu.elte.sm.validation.SMIssueCodes.*
 
+/**
+ * The validator can be used to define static validation rules for our language.
+ * The AST traversal is done automatically by the framework, where one-parameter
+ * methods annotated with '@Check' are called for each matching node.
+ * 
+ * See: https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#custom-validation
+ */
 class SMValidator extends AbstractSMValidator {
 
 	@Inject extension IJvmModelAssociations
@@ -40,6 +47,12 @@ class SMValidator extends AbstractSMValidator {
 		}
 	}
 
+	/**
+	 * Remember that in Xbase, even statements can be used as expressions. However,
+	 * similarly to dead code, pure expressions (i.e. no side effects) are not allowed
+	 * as a separate statement inside a block. Here we specify that 'RaiseEvent' is OK
+	 * to stand on his own.
+	 */
 	override isValueExpectedRecursive(XExpression expression) {
 		expression instanceof SMRaiseEventExpression || super.isValueExpectedRecursive(expression)
 	}

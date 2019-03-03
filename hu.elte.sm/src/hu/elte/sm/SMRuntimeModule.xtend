@@ -10,6 +10,13 @@ import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider
 import org.eclipse.xtext.xbase.compiler.XbaseCompiler
 import org.eclipse.xtext.xbase.typesystem.computation.ITypeComputer
 
+/**
+ * The runtime module defines interface-implementation bindings for dependency
+ * injection (which is used, for example, to populate fields annotated with
+ * '@Inject' across the language infrastructure).
+ * 
+ * See: https://www.eclipse.org/Xtext/documentation/302_configuration.html#dependency-injection
+ */
 class SMRuntimeModule extends AbstractSMRuntimeModule {
 
 	def Class<? extends ITypeComputer> bindITypeComputer() {

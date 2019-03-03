@@ -1,7 +1,28 @@
+/**
+ * The grammar defines not only the concrete syntax, but also the underlying
+ * semantic (AST) metamodel of our language. After running the 'Generate Language
+ * Infrastructure' configuration, you can find the inferred metamodel inside
+ * 'src-gen/hu.elte.sm.sM'.
+ * 
+ * See: https://www.eclipse.org/Xtext/documentation/301_grammarlanguage.html
+*/
+
+/**
+ * We reuse Xtype for type references and Xbase for statements and expressions.
+ * These are built-in sublanguages, of course written in Xtext.
+ * 
+ * See: https://www.eclipse.org/Xtext/documentation/305_xbase.html#jvmtypes
+ * See: https://www.eclipse.org/Xtext/documentation/305_xbase.html#xbase-java-references
+ * See: https://www.eclipse.org/Xtext/documentation/305_xbase.html#xbase-expressions
+ * See: https://www.eclipse.org/Xtext/documentation/305_xbase.html#xbase-language-ref-introduction
+ */
+
 grammar hu.elte.sm.SM with org.eclipse.xtext.xbase.Xbase
 generate sM "http://www.elte.hu/sm/SM"
 
 import "http://www.eclipse.org/xtext/xbase/Xbase" as xbase
+
+// Structural Elements
 
 SMFile:
 	'package' name=QualifiedName
@@ -49,6 +70,8 @@ SMTransition:
 	'}'
 ;
 
+// Statements and Expressions
+
 SMExpression returns xbase::XExpression
 	: SMCheckStateExpression
 	| SMRaiseEventExpression
@@ -64,6 +87,9 @@ SMRaiseEventExpression returns xbase::XExpression:
 	'raise' event=[SMEvent|QualifiedName]? 'in' target=XExpression
 ;
 
+/**
+ * Inject our custom action language elements into Xbase.
+ */
 @Override
 XPrimaryExpression returns xbase::XExpression
 	: XConstructorCall
@@ -81,5 +107,5 @@ XPrimaryExpression returns xbase::XExpression
 	| XReturnExpression
 	| XTryCatchFinallyExpression
 	| XParenthesizedExpression
-	| SMExpression
+	| SMExpression // the only difference compared to super
 ;

@@ -5,6 +5,12 @@ import org.eclipse.xtext.xtext.generator.model.project.*
 
 var rootPath = ".."
 
+/**
+ * This MWE2 workflow tells the generic Xtext language infrastructure generator
+ * what to do with our DSL.
+ * 
+ * See: https://www.eclipse.org/Xtext/documentation/302_configuration.html#generator
+ */
 Workflow {
 	
 	component = XtextGenerator {
@@ -30,8 +36,6 @@ Workflow {
 				generateStub = false
 			}
 			validator = {
-				// composedCheck = "org.eclipse.xtext.validation.NamesAreUniqueValidator"
-				// Generates checks for @Deprecated grammar annotations, an IssueProvider and a corresponding PropertyPage
 				generateDeprecationValidation = true
 			}
 			junitSupport = {

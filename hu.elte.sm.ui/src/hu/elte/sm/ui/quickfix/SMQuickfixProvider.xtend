@@ -15,6 +15,14 @@ import org.eclipse.xtext.xbase.ui.quickfix.XbaseQuickfixProvider
 
 import static hu.elte.sm.validation.SMIssueCodes.*
 
+/**
+ * In the quickfix provider we can define automatically applicable solutions to the
+ * possible problems we implicitly listed in our static validation rules (for a Java
+ * [technically Xtend] example, hover the word 'Xtend' in the source of this comment
+ * and see how it could be added to the dictionary etc.).
+ * 
+ * See: https://www.eclipse.org/Xtext/documentation/310_eclipse_support.html#quick-fixes
+ */
 class SMQuickfixProvider extends XbaseQuickfixProvider {
 
 	@Inject extension ReplacingAppendable.Factory
@@ -25,17 +33,19 @@ class SMQuickfixProvider extends XbaseQuickfixProvider {
 			new ISemanticModification() {
 				override apply(EObject element, IModificationContext context) {
 					val machine = element as SMMachine
-					val empty = machine.members.empty
+					val isEmpty = machine.members.empty
 
-					val offset = if (empty)
+					// find where the code of the new state should be appended
+					val offset = if (isEmpty)
 							NodeModelUtils.findActualNodeFor(machine).leafNodes.findFirst[text == "{"].offset + 1
 						else
 							NodeModelUtils.findActualNodeFor(machine.members.head).offset
 					val appendable = context.xtextDocument.create(machine.eResource as XtextResource, offset, 0)
 
-					if (empty) appendable.increaseIndentation.newLine
+					// append the code of the new state
+					if (isEmpty) appendable.increaseIndentation.newLine
 					appendable.append("init initial")
-					if (empty) appendable.decreaseIndentation
+					if (isEmpty) appendable.decreaseIndentation
 					appendable.newLine
 
 					appendable.commitChanges()

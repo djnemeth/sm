@@ -6,6 +6,13 @@ import org.eclipse.xtext.xbase.XExpression
 import org.eclipse.xtext.xbase.compiler.XbaseCompiler
 import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
 
+/**
+ * The compiler defines how our custom statements and expressions are translated to
+ * textual Java code. As we have added our new action code elements to Xbase, we
+ * start from 'XbaseCompiler'. In Xbase, an action code element can appear both as
+ * a statement and as an expression, therefore we have to define both interpretations
+ * of the elements introduced by us.
+ */
 class SMCompiler extends XbaseCompiler {
 
 	override protected doInternalToJavaStatement(XExpression expression, ITreeAppendable builder, boolean isReferenced) {
@@ -19,9 +26,12 @@ class SMCompiler extends XbaseCompiler {
 	}
 
 	def dispatch void toJavaStatement(SMCheckStateExpression checkStateExpr, ITreeAppendable it) {
-		// do nothing, CheckState is strictly an expression
+		// do nothing, 'CheckState' is strictly an expression
 	}
 
+	/**
+	 * Maps a 'RaiseEvent' statement to a 'handleEvent' method call on the target.
+	 */
 	def dispatch void toJavaStatement(SMRaiseEventExpression raiseEventExpr, ITreeAppendable it) {
 		newLine
 		toJavaExpression(raiseEventExpr.target, it)
@@ -40,6 +50,9 @@ class SMCompiler extends XbaseCompiler {
 		}
 	}
 
+	/**
+	 * Maps a 'CheckState' expression to an 'inState' method call on the target.
+	 */
 	def dispatch void toJavaExpression(SMCheckStateExpression checkStateExpr, ITreeAppendable it) {
 		toJavaExpression(checkStateExpr.target, it)
 		append(".inState(")
@@ -48,7 +61,7 @@ class SMCompiler extends XbaseCompiler {
 	}
 
 	def dispatch void toJavaExpression(SMRaiseEventExpression raiseEventExpr, ITreeAppendable it) {
-		// do nothing, RaiseEvent is strictly a statement
+		// do nothing, 'RaiseEvent' is strictly a statement
 	}
 
 }

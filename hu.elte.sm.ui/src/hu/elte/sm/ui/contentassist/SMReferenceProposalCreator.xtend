@@ -13,6 +13,11 @@ import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations
 import org.eclipse.xtext.xbase.typesystem.IBatchTypeResolver
 import org.eclipse.xtext.xbase.ui.contentassist.XbaseReferenceProposalCreator
 
+/**
+ * In the reference proposal creator we can filter content assist proposals issued
+ * in the context of a cross-reference. This is how we provide entity candidates
+ * which are truly relevant for the given cross-reference context.
+ */
 class SMReferenceProposalCreator extends XbaseReferenceProposalCreator {
 
 	@Inject extension IBatchTypeResolver
@@ -20,6 +25,7 @@ class SMReferenceProposalCreator extends XbaseReferenceProposalCreator {
 
 	override queryScope(IScope scope, EObject model, EReference ref, Predicate<IEObjectDescription> filter) {
 		switch model {
+			// In a 'RaiseEvent' expression, only the events of the target machine should be proposed.
 			SMRaiseEventExpression case ref == SMPackage.Literals.SM_RAISE_EVENT_EXPRESSION__EVENT: {
 				val jvmClass = model.target.resolveTypes.getActualType(model.target).type
 				val sourceMachine = jvmClass.primarySourceElement as SMMachine
