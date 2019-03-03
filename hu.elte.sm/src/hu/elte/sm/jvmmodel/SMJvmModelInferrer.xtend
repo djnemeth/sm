@@ -80,6 +80,7 @@ class SMJvmModelInferrer extends AbstractModelInferrer {
 				«FOR transition : machine.members.filter(SMTransition)»
 					if (inState(State.«transition.source.name») && event == Event.«transition.trigger.name») {
 						currentState = State.«transition.target.name»;
+						return;
 					}
 				«ENDFOR»
 			'''
@@ -95,6 +96,9 @@ class SMJvmModelInferrer extends AbstractModelInferrer {
 				// infer JVM methods from SM methods
 				SMMethod: jvmClass.members += member.toMethod(member.name, member.type) [
 					body = member.body
+					member.parameters.forEach [ param |
+						parameters += param.toParameter(param.name, param.parameterType)
+					]
 				]
 			}
 		]
