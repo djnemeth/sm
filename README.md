@@ -17,23 +17,23 @@ master's course on compilers at Eötvös Loránd University, Budapest, Hungary.
 
 ## Installation
 
-Before starting, make sure you have a JDK 8 implementation installed on your
+1. Before starting, make sure you have a JDK 8 implementation installed on your
 computer. As this is not the latest version, on some GNU/Linux distributions you
 might need to use external package repositories to obtain it.
 
-SM is written for Eclipse, in Eclipse, therefore the next step is to acquire the
-host IDE. We recommend the *[Eclipse IDE for Java and DSL Developers](https://www.eclipse.org/downloads/packages/release/2018-12/r/eclipse-ide-java-and-dsl-developers)*
+1. SM is written for Eclipse, in Eclipse, therefore the next step is to acquire
+the host IDE. We recommend the *[Eclipse IDE for Java and DSL Developers](https://www.eclipse.org/downloads/packages/release/2018-12/r/eclipse-ide-java-and-dsl-developers)*
 package of Eclipse 2018-12. Slightly different versions might also work, but a
 matching Xtext SDK is mandatory.
 
-In Eclipse, import projects *hu.elte.sm*, *hu.elte.sm.ide* and *hu.elte.sm.ui*
+1. In Eclipse, import projects *hu.elte.sm*, *hu.elte.sm.ide* and *hu.elte.sm.ui*
 through *File > Import... > General > Existing Projects into Workspace*. Then
 launch the *Generate SM (sm) Language Infrastructure* configuration from *Run >
 Run Configurations... > Mwe2 Launch* and let the framework download ANTLR when
 asked about it.
 
-Once the language infrastructure is generated, after a healthy dose of cleans &
-rebuilds you should get no compiler errors. To actually try SM, fire up a
+1. Once the language infrastructure is generated, after a healthy dose of cleans
+& rebuilds you should get no compiler errors. To actually try SM, fire up a
 runtime Eclipse instance through *Run > Run Configurations... > Eclipse
 Application > Launch Runtime Eclipse* and proceed to the next section of this
 guide.
@@ -45,13 +45,13 @@ provided in project *hu.elte.sm.examples*. Import this into the previously
 started *runtime* Eclipse instance by selecting it in *File > Import... >
 General > Existing Projects into Workspace*.
 
-The *Count* example in package *hu.elte.sm.examples.count* contains a simple
+- The *Count* example in package *hu.elte.sm.examples.count* contains a simple
 machine which can register *and* count ticks, where the latter depends on its
 current state. Notice how it is used as a conventional Java class inside
 *Count.java*, even with regards to generated members like the `handleEvent`
 method and the `Event` enum.
 
-*Hospital* presents a little more complicated example with three interacting
+- *Hospital* presents a little more complicated example with three interacting
 machines simulating a doctor and two patients, randomly befriending and
 cross-infecting each other in the hope of eventual recovery. Several forms of
 both internal & external communication and state checks can be seen in action
@@ -67,7 +67,7 @@ projects by selecting *Build Path > Add Libraries...* from the project's context
 menu.
 
 Finally, we advise trying out how the language infrastructure behaves under
-common Eclipse functions. Check the syntax highlight, jump through references,
+common Eclipse functions. Check the syntax highlighting, jump through references,
 look at the outline, produce validation errors, try your luck with quickfixes,
 ask the content assist, place breakpoints and start cross-language debugging.
 
